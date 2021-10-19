@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.kr.board.service.impl.BoardMapper">
+
+<select id="getList" resultType="HashMap">
+	SELECT 	*
+	FROM	test
+	ORDER BY board_id DESC
+	LIMIT 10 OFFSET #{offset}
+</select>
+
+<select id="cnt" resultType="int">
+	SELECT	count(*)
+	FROM	test
+</select>
+
+<select id="findList" resultType="HashMap">
+	SELECT	*
+	FROM	test
+	WHERE	board_name like '%'||#{keyword}||'%'
+			or board_title like '%'||#{keyword}||'%'
+			or board_content like '%'||#{keyword}||'%'
+	ORDER BY board_id DESC
+	LIMIT 10 OFFSET #{offset}
+</select>
+
+<select id="findCnt" resultType="int">
+	SELECT	count(*)
+	FROM	test
+	WHERE	board_name like '%'||#{keyword}||'%'
+			or board_title like '%'||#{keyword}||'%'
+			or board_content like '%'||#{keyword}||'%'
+</select>
+
+<insert id="insertList">
+	<selectKey resultType="int" keyProperty="id" order="BEFORE">
+		SELECT MAX(board_id)+1 FROM test
+	</selectKey>
+	INSERT INTO
+		test(board_id, board_name, board_title, board_content)
+	VALUES
+		(#{boardId}, #{boardName}, #{boardTitle}, #{boardContent})
+</insert>
+
+<select id="getDetail" resultType="HashMap">
+	SELECT 	*
+	FROM	test
+	WHERE	board_id = #{boardId}
+</select>
+
+<delete id="deleteList">
+	DELETE 	FROM	test
+	WHERE	board_id = #{boardId}
+</delete>
+
+<update id="updateList">
+UPDATE 	test
+SET 	board_name = #{boardName},
+		board_title = #{boardTitle},
+		board_content = #{boardContent}
+WHERE 	board_id = #{boardId}
+</update>
+
+
+</mapper>
